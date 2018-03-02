@@ -5,4 +5,4 @@ Work in progress
 
 Run CMAKE: cmake -H. -Bbuild
 
-![alt text](raytracing.PNG)
+![alt text](raytracing2.PNG)
