@@ -11,6 +11,7 @@ src/Camera.cpp
 inc/Camera.hpp
 src/Color.cpp
 inc/Color.hpp
+inc/Defaults.hpp
 src/main.cpp
 inc/main.hpp
 src/Plane.cpp
@@ -21,6 +22,8 @@ src/Shape.cpp
 inc/Shape.hpp
 inc/Vector.hpp
 inc/World.hpp
+src/Sphere.cpp
+inc/Sphere.hpp
 )
 
 set(SDL2_DIR

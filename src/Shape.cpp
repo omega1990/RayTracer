@@ -6,6 +6,14 @@ rt::Shape::GetColor() const
 	return myColor;
 }
 
+bool rt::Shape::IsIntersecting(
+	const Vector<float>& aRayVector, 
+	const Vector<float>& aRayOrigin, 
+	double & aOutDistance)
+{
+	return false;
+}
+
 rt::Shape::Shape()
 {
 }

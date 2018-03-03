@@ -58,7 +58,7 @@ rt::Camera::PrivCalculateRays()
 		{
 			auto x = myPosition.GetX() + j;
 			auto y = myPosition.GetY() + i;
-			auto z = myPosition.GetZ() + myFocalDistance;
+			auto z = myPosition.GetZ() - myFocalDistance;
 			
 			// TODO: camera position
 			CanvasPixel pixel(x, y, z);

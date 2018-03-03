@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <map>
 
 #define uint8 uint8_t
 
@@ -13,12 +14,15 @@ namespace rt
 		SKY = 1,
 		GREY = 2,
 		DARK_BLUE = 3,
-		DARK_GREY = 4
+		DARK_GREY = 4,
+		BLACK = 5
 	};
 
 	class Color
 	{
 	public:
+		Color();
+	
 		Color(const uint8& aRed,
 			const uint8& aGreen,
 			const uint8& aBlue,
@@ -31,7 +35,7 @@ namespace rt
 		const Color operator+(const float & aNum) const;
 		const Color operator*(const float & aNum) const;
 
-		const static std::vector<Color> myPalette;
+		static std::map<ColorName, Color> myPalette;
 
 		uint8 Red = 0;
 		uint8 Green = 0;

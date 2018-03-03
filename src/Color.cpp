@@ -1,5 +1,13 @@
 #include "../inc/Color.hpp"
 
+rt::Color::Color()
+	: Red(0)
+	, Green(0)
+	, Blue(0)
+	, Alpha(255)
+{
+}
+
 rt::Color::Color(
 	const uint8& aRed, 
 	const uint8& aGreen, 
@@ -49,11 +57,12 @@ rt::Color::operator*(const float& aNum) const
 	return Color(red, green, blue, Alpha);
 }
 
-const std::vector<rt::Color> rt::Color::myPalette =
+std::map<rt::ColorName, rt::Color> rt::Color::myPalette =
 {
-	Color(255, 0, 0, 255),
-	Color(126, 151, 228, 255),
-	Color(100, 100, 100, 255),
-	Color(0, 0, 100, 255),
-	Color(50, 50, 50, 255),
+	{rt::RED, Color(255, 0, 0, 255)},
+	{rt::SKY, Color(126, 151, 228, 255)},
+	{rt::GREY, Color(100, 100, 100, 255)},
+	{rt::DARK_BLUE, Color(0, 0, 100, 255)},
+	{rt::DARK_GREY, Color(50, 50, 50, 255)},
+	{rt::BLACK, Color(0, 0, 0, 255)}
 };

@@ -26,7 +26,7 @@ bool
 rt::Plane::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin,
-	float&				 aOutDistance)
+	double&				 aOutDistance)
 {
 	auto line = aRayVector + aRayOrigin;
 	auto normal = myNormalVector.Normalize();

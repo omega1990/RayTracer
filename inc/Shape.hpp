@@ -13,7 +13,7 @@ namespace rt
 		virtual bool IsIntersecting(
 			const Vector<float>& aRayVector,
 			const Vector<float>& aRayOrigin,
-			float&				 aOutDistance) = 0;
+			double&				 aOutDistance);
 
 	protected:
 		Shape();

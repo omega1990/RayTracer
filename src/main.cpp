@@ -4,6 +4,7 @@
 
 #include "../inc/Vector.hpp"
 #include "../inc/Plane.hpp"
+#include "../inc/Sphere.hpp"
 #include "../inc/Camera.hpp"
 #include "../inc/World.hpp"
 #include "../inc/main.hpp"
@@ -71,13 +72,17 @@ int main(int argc, char* argv[])
 	rt::Camera camera;
 	rt::World world;
 	rt::Plane plane1(rt::ColorName::GREY);
+	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, 60.0f), 10.0f, rt::DARK_GREY);
 	rt::Plane plane2(rt::Vector<float>(-5.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
-	world.myShapes.push_back(plane1);
-	world.myShapes.push_back(plane2);
-	world.myShapes.push_back(plane3);
-	world.myShapes.push_back(plane4);
+	//rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	//rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
+	//rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	world.myShapes.push_back(&plane1);
+	world.myShapes.push_back(&plane2);
+	//world.myShapes.push_back(plane3);
+	//world.myShapes.push_back(plane4);
+	//world.myShapes.push_back(plane5);
+	world.myShapes.push_back(&sphere1);
 
 
 	bool retflag;
@@ -105,28 +110,30 @@ int main(int argc, char* argv[])
 		}
 
 		const rt::Canvas& canvas = camera.GetCanvas();
-		float distance = 0.0f;
+		double distance = 0;
 
 		int width = 0;
 		int height = static_cast<int>(canvas.GetHeight()) - 1;
 
+		auto cameraPosition = camera.GetPosition();
+
 		for (const auto& pixel : canvas.CanvasPixels)
 		{
-			float closestDistance = FLT_MAX;
+			double closestDistance = DBL_MAX;
 
 			bool hit = false;
 			for (auto& shape : world.myShapes)
 			{
-				if (shape.IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), camera.GetPosition(), distance))
+				if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), camera.GetPosition(), distance))
 				{
-					if (distance >= closestDistance)
+					if (distance > closestDistance)
 					{
 						continue;
 					}
 
 					closestDistance = distance;
 
-					auto color = shape.GetColor() + (distance/8);
+					auto color = shape->GetColor() + (distance/8);
 					DrawPixel(color, width, height);
 
 					hit = true;

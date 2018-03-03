@@ -18,7 +18,7 @@ namespace rt
 
 		bool IsIntersecting(const Vector<float>& aRayVector,
 							const Vector<float>& aRayOrigin,
-							float&				 aOutDistance) override;
+							double&				 aOutDistance) override;
 	private:
 		Vector<float> myNormalVector{ 0.0f, 1.0f, 0.0f };
 		Vector<float> myPoint{ 0.0f, 0.0f, 0.0f };

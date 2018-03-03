@@ -37,7 +37,7 @@ namespace rt
 	private:
 		void PrivCalculateRays();
 
-		Vector<float> myPosition{ 0.0f, 100.0f, 200.0f };
+		Vector<float> myPosition{ 0.0f, 100.0f, 50.0f };
 		Vector<float> myDirection{ 0.0f, 0.0f, -1.0f };
 		float myFocalDistance = DEFAULT_FOCAL_DISTANCE;
 

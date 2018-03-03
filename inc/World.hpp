@@ -7,6 +7,6 @@ namespace rt
 	class World
 	{
 	public:
-		std::vector<Plane> myShapes = {};
+		std::vector<Shape*> myShapes = {};
 	};
 }
