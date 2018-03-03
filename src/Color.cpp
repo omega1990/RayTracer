@@ -64,5 +64,6 @@ std::map<rt::ColorName, rt::Color> rt::Color::myPalette =
 	{rt::GREY, Color(100, 100, 100, 255)},
 	{rt::DARK_BLUE, Color(0, 0, 100, 255)},
 	{rt::DARK_GREY, Color(50, 50, 50, 255)},
-	{rt::BLACK, Color(0, 0, 0, 255)}
+	{rt::BLACK, Color(0, 0, 0, 255)},
+	{rt::SPHERE, Color(31, 27, 61)}
 };

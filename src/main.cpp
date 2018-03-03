@@ -72,16 +72,16 @@ int main(int argc, char* argv[])
 	rt::Camera camera;
 	rt::World world;
 	rt::Plane plane1(rt::ColorName::GREY);
-	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, 60.0f), 10.0f, rt::DARK_GREY);
+	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, 50.0f), 10.0f, rt::SPHERE);
 	rt::Plane plane2(rt::Vector<float>(-5.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	//rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	//rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
-	//rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
+	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, -470.0f), rt::ColorName::GREY);
 	world.myShapes.push_back(&plane1);
 	world.myShapes.push_back(&plane2);
-	//world.myShapes.push_back(plane3);
-	//world.myShapes.push_back(plane4);
-	//world.myShapes.push_back(plane5);
+	world.myShapes.push_back(&plane3);
+	world.myShapes.push_back(&plane4);
+	world.myShapes.push_back(&plane5);
 	world.myShapes.push_back(&sphere1);
 
 
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 			bool hit = false;
 			for (auto& shape : world.myShapes)
 			{
-				if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), camera.GetPosition(), distance))
+				if (shape->IsIntersecting(rt::Vector<float>(pixel.X - cameraPosition.GetX(), pixel.Y - cameraPosition.GetY(), pixel.Z - cameraPosition.GetZ()), camera.GetPosition(), distance))
 				{
 					if (distance > closestDistance)
 					{

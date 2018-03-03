@@ -15,7 +15,8 @@ namespace rt
 		GREY = 2,
 		DARK_BLUE = 3,
 		DARK_GREY = 4,
-		BLACK = 5
+		BLACK = 5, 
+		SPHERE = 6
 	};
 
 	class Color
