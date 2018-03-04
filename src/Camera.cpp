@@ -35,6 +35,12 @@ rt::Camera::GetCanvas() const
 	return myCanvas;
 }
 
+Vector<float>
+rt::Camera::GetDirection() const
+{
+	return myDirection;
+}
+
 void 
 rt::Camera::MoveUp(	
 	float aPixels)
@@ -46,7 +52,10 @@ rt::Camera::MoveUp(
 void 
 rt::Camera::PrivCalculateRays()
 {
-	// TODO: make this generic
+	// Pixels are calculated in the local coordinate system
+	// Important: For using this, it needs to be converted 
+	// to the world coordinates
+
 	myCanvas.CanvasPixels.clear();
 
 	int canvasHeight = static_cast<int>(myCanvas.GetHeight());
@@ -58,12 +67,9 @@ rt::Camera::PrivCalculateRays()
 		{
 			auto x = myPosition.GetX() + j;
 			auto y = myPosition.GetY() + i;
-			auto z = myPosition.GetZ() - myFocalDistance;
+			auto z = myPosition.GetZ() + myFocalDistance;
 			
-			// TODO: camera position
 			CanvasPixel pixel(x, y, z);
-			//myCanvas.CanvasPixels.clear();
-			//pixel.SetRayVector(Vector<float>(x, y, z));
 			myCanvas.CanvasPixels.push_back(pixel);
 		}
 	}

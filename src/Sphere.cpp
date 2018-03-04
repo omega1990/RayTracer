@@ -41,7 +41,8 @@ bool
 rt::Sphere::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin, 
-	double& aOutDistance)
+	double& aOutDistance,
+	double& aLight)
 {
 	auto ray = aRayVector.Normalize();
 
@@ -64,6 +65,10 @@ rt::Sphere::IsIntersecting(
 	}
 
 	aOutDistance = t0;
+
+	// Hack for shading
+	rt::Vector<float> Phit = aRayOrigin + ray * t0;
+	aLight = std::abs(ray * (Phit - myRadius).Normalize());
 
 	return true;
 }

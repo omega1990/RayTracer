@@ -9,7 +9,8 @@ rt::Shape::GetColor() const
 bool rt::Shape::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin, 
-	double & aOutDistance)
+	double&				 aOutDistance,
+	double&				 aLight)
 {
 	return false;
 }

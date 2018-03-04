@@ -16,7 +16,8 @@ namespace rt
 
 		bool IsIntersecting(const Vector<float>& aRayVector,
 							const Vector<float>& aRayOrigin,
-							double&				 aOutDistance) override;
+							double&				 aOutDistance,
+							double&				 aLight) override;
 
 	private:
 		Vector<float> myCenter{ 0.0f, 0.0f, 0.0f };

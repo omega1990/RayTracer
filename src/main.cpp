@@ -72,11 +72,11 @@ int main(int argc, char* argv[])
 	rt::Camera camera;
 	rt::World world;
 	rt::Plane plane1(rt::ColorName::GREY);
-	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, 50.0f), 10.0f, rt::SPHERE);
+	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, -55.0f), 10.0f, rt::SPHERE);
 	rt::Plane plane2(rt::Vector<float>(-5.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, -470.0f), rt::ColorName::GREY);
+	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 470.0f), rt::ColorName::GREY);
 	world.myShapes.push_back(&plane1);
 	world.myShapes.push_back(&plane2);
 	world.myShapes.push_back(&plane3);
@@ -117,14 +117,26 @@ int main(int argc, char* argv[])
 
 		auto cameraPosition = camera.GetPosition();
 
+		// I need camera axes in terms of world coordinates
+		rt::Vector<float> xCameraAxis = rt::Vector<float>(1.0f, 0.0f, 0.0f);
+		rt::Vector<float> yCameraAxis = camera.GetDirection().Cross(xCameraAxis);
+
 		for (const auto& pixel : canvas.CanvasPixels)
 		{
+			// Before using the canvas pixels, its coordiantes need to be translated
+			// to the world's coordinates 
+			// The code below is pure shit 
+			float x = xCameraAxis.GetX() * pixel.X;
+			float y = yCameraAxis.GetY() * pixel.Y;
+			float z = camera.GetDirection().GetZ() * pixel.Z;
+
 			double closestDistance = DBL_MAX;
+			double light;
 
 			bool hit = false;
 			for (auto& shape : world.myShapes)
 			{
-				if (shape->IsIntersecting(rt::Vector<float>(pixel.X - cameraPosition.GetX(), pixel.Y - cameraPosition.GetY(), pixel.Z - cameraPosition.GetZ()), camera.GetPosition(), distance))
+				if (shape->IsIntersecting(rt::Vector<float>(x, y, z), camera.GetPosition(), distance, light))
 				{
 					if (distance > closestDistance)
 					{
@@ -133,7 +145,7 @@ int main(int argc, char* argv[])
 
 					closestDistance = distance;
 
-					auto color = shape->GetColor() + (distance/8);
+					auto color = shape->GetColor() * light + (distance / 8) ;
 					DrawPixel(color, width, height);
 
 					hit = true;

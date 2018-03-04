@@ -26,7 +26,8 @@ bool
 rt::Plane::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin,
-	double&				 aOutDistance)
+	double&				 aOutDistance,
+	double&				 aLight)
 {
 	auto line = aRayVector + aRayOrigin;
 	auto normal = myNormalVector.Normalize();
@@ -37,6 +38,8 @@ rt::Plane::IsIntersecting(
 	{
 		Vector<float> p0l0 = myPoint - aRayOrigin;
 		aOutDistance = p0l0 * normal / denom;
+		// Shading hack
+		aLight = 1;
 		return (aOutDistance >= 0);
 	}
 
