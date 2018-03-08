@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	rt::Camera camera;
 	rt::World world;
 	rt::Plane plane1(rt::ColorName::GREY);
-	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, -55.0f), 10.0f, rt::SPHERE);
+	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, -150.0f), 10.0f, rt::SPHERE);
 	rt::Plane plane2(rt::Vector<float>(-5.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
@@ -102,7 +102,11 @@ int main(int argc, char* argv[])
 				switch (event.key.keysym.sym)
 				{
 				case SDLK_UP:
-					camera.MoveUp(5);
+					camera.MoveUp(0.05f);
+					break;
+				case SDLK_DOWN:
+					camera.MoveDown(0.05f);
+					break;
 				default:
 					break;
 				}
@@ -118,17 +122,16 @@ int main(int argc, char* argv[])
 		auto cameraPosition = camera.GetPosition();
 
 		// I need camera axes in terms of world coordinates
-		rt::Vector<float> xCameraAxis = rt::Vector<float>(1.0f, 0.0f, 0.0f);
-		rt::Vector<float> yCameraAxis = camera.GetDirection().Cross(xCameraAxis);
+		rt::Vector<float> yCameraAxis = camera.GetDirection().Cross(camera.GetTilt());
+		float x, y, z;
 
 		for (const auto& pixel : canvas.CanvasPixels)
 		{
-			// Before using the canvas pixels, its coordiantes need to be translated
+			// Before using the canvas pixels, its coordinates need to be translated
 			// to the world's coordinates 
-			// The code below is pure shit 
-			float x = xCameraAxis.GetX() * pixel.X;
-			float y = yCameraAxis.GetY() * pixel.Y;
-			float z = camera.GetDirection().GetZ() * pixel.Z;
+			x = camera.GetTilt().GetX() * pixel.X + yCameraAxis.GetX() * pixel.Y + camera.GetDirection().GetX() * pixel.Z;
+			y = camera.GetTilt().GetY() * pixel.X + yCameraAxis.GetY() * pixel.Y + camera.GetDirection().GetY() * pixel.Z;
+			z = camera.GetTilt().GetZ() * pixel.X + yCameraAxis.GetZ() * pixel.Y + camera.GetDirection().GetZ() * pixel.Z;
 
 			double closestDistance = DBL_MAX;
 			double light;

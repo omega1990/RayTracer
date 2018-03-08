@@ -44,7 +44,7 @@ rt::Sphere::IsIntersecting(
 	double& aOutDistance,
 	double& aLight)
 {
-	auto ray = aRayVector.Normalize();
+	auto ray = (aRayVector - aRayOrigin).Normalize();
 
 	float t0, t1; 
 				  

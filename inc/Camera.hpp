@@ -32,14 +32,15 @@ namespace rt
 		Vector<float> GetPosition	() const;
 		const Canvas& GetCanvas		() const;
 		Vector<float> GetDirection	() const;
+		Vector<float> GetTilt		() const;
 		void MoveUp					(float aPixels);
-
-
+		void MoveDown				(float aPixels);
 	private:
 		void PrivCalculateRays();
 
-		Vector<float> myPosition{ 0.0f, 100.0f, -50.0f };
-		Vector<float> myDirection{ 0.0f, -10.0f, 1.0f };
+		Vector<float> myPosition{ 0.0f, 200.0f, -150.0f };
+		Vector<float> myDirection{ 0.0f, -0.3f, 1.0f }; //r
+		Vector<float> myTilt{ 1.0f, 0.0f, 0.0f }; //p
 		float myFocalDistance = DEFAULT_FOCAL_DISTANCE;
 
 		Canvas myCanvas;

@@ -41,11 +41,25 @@ rt::Camera::GetDirection() const
 	return myDirection;
 }
 
+rt::Vector<float> 
+rt::Camera::GetTilt() const
+{
+	return myTilt;
+}
+
 void 
 rt::Camera::MoveUp(	
 	float aPixels)
+{	
+	myDirection.SetY(myDirection.GetY() + aPixels);
+	PrivCalculateRays();
+}
+
+void
+rt::Camera::MoveDown(
+	float aPixels)
 {
-	myPosition.SetY(myPosition.GetY() + aPixels);
+	myDirection.SetY(myDirection.GetY() - aPixels);
 	PrivCalculateRays();
 }
 
@@ -65,9 +79,9 @@ rt::Camera::PrivCalculateRays()
 	{
 		for (int j = -canvasWidth / 2; j < canvasWidth / 2; j++)
 		{
-			auto x = myPosition.GetX() + j;
-			auto y = myPosition.GetY() + i;
-			auto z = myPosition.GetZ() + myFocalDistance;
+			auto x = j;
+			auto y = i;
+			auto z = myFocalDistance;
 			
 			CanvasPixel pixel(x, y, z);
 			myCanvas.CanvasPixels.push_back(pixel);
