@@ -72,9 +72,9 @@ int main(int argc, char* argv[])
 	rt::Camera camera;
 	rt::World world;
 	rt::Plane plane1(rt::ColorName::GREY);
-	rt::Sphere sphere1(rt::Vector<float>(0.0f, 20.0f, -150.0f), 10.0f, rt::SPHERE);
-	rt::Plane plane2(rt::Vector<float>(-5.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane3(rt::Vector<float>(5.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	rt::Sphere sphere1(rt::Vector<float>(0.0f, 10.0f, 50.0f), 70.0f, rt::SPHERE);
+	rt::Plane plane2(rt::Vector<float>(-1.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	rt::Plane plane3(rt::Vector<float>(1.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 470.0f), rt::ColorName::GREY);
 	world.myShapes.push_back(&plane1);
@@ -106,6 +106,12 @@ int main(int argc, char* argv[])
 					break;
 				case SDLK_DOWN:
 					camera.MoveDown(0.05f);
+					break;
+				case SDLK_LEFT:
+					camera.MoveLeft(0.05f);
+					break;
+				case SDLK_RIGHT:
+					camera.MoveRight(0.05f);
 					break;
 				default:
 					break;

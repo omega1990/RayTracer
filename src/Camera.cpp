@@ -63,6 +63,22 @@ rt::Camera::MoveDown(
 	PrivCalculateRays();
 }
 
+void
+rt::Camera::MoveRight(
+	float aPixels)
+{
+	myDirection.SetX(myDirection.GetX() + aPixels);
+	PrivCalculateRays();
+}
+
+void
+rt::Camera::MoveLeft(
+	float aPixels)
+{
+	myDirection.SetX(myDirection.GetX() - aPixels);
+	PrivCalculateRays();
+}
+
 void 
 rt::Camera::PrivCalculateRays()
 {

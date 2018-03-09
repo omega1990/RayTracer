@@ -23,9 +23,16 @@ bool SolveQuadratic(
 	float& x1)
 {
 	float discr = b * b - 4 * a * c;
-	if (discr < 0) return false;
-	else if (discr == 0) x0 = x1 = -0.5 * b / a;
-	else {
+	if (discr < 0)
+	{
+		return false;
+	}
+	else if (discr == 0)
+	{
+		x0 = x1 = -0.5 * b / a;
+	}
+	else 
+	{
 		float q = (b > 0) ?
 			-0.5 * (b + sqrt(discr)) :
 			-0.5 * (b - sqrt(discr));
@@ -44,31 +51,34 @@ rt::Sphere::IsIntersecting(
 	double& aOutDistance,
 	double& aLight)
 {
-	auto ray = (aRayVector - aRayOrigin).Normalize();
-
-	float t0, t1; 
+	auto D = aRayVector.Normalize();
 				  
-	Vector<float> L = myCenter;
-	float a = ray * ray;
-	float b = ray * L * 2;
-	float c = L * L - (myRadius * myRadius);
-	if (!SolveQuadratic(a, b, c, t0, t1)) return false;
-	
-	if (t0 > t1)
+	Vector<float> L = myCenter - aRayOrigin;
+	float Tca = L * D;
+	if (Tca < 0)
 	{
-		std::swap(t0, t1);
+		return false;
 	}
 
-	if (t0 < 0) {
-		t0 = t1; // if t0 is negative, let's use t1 instead 
-		if (t0 < 0) return false; // both t0 and t1 are negative 
+	float d = sqrtf((L*L) - (Tca*Tca));
+	if (d > myRadius)
+	{
+		return false;
+	}
+
+	float Thc = sqrtf(myRadius * myRadius - d * d);
+	float t0 = Tca - Thc;
+	float t1 = Tca + Thc;
+	if (t1 < t0)
+	{
+		t0 = t1;
 	}
 
 	aOutDistance = t0;
 
 	// Hack for shading
-	rt::Vector<float> Phit = aRayOrigin + ray * t0;
-	aLight = std::abs(ray * (Phit - myRadius).Normalize());
+	rt::Vector<float> Phit = aRayOrigin + D * t0;
+	aLight = std::abs(D * (Phit - myCenter).Normalize());
 
 	return true;
 }

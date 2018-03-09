@@ -19,6 +19,7 @@ namespace rt
 		T GetY() const;
 		T GetZ() const;
 
+		void SetX(const T& aX);
 		void SetZ(const T& aZ);
 		void SetY(const T& aY);
 
@@ -46,6 +47,7 @@ namespace rt
 		T myY; 
 		T myZ;
 	};
+
 
 }
 
@@ -88,19 +90,23 @@ rt::Vector<T>::GetZ() const
 	return myZ;
 }
 
+template <typename T>
+void rt::Vector<T>::SetX(const T& aX)
+{
+	myX = aX;
+}
+
 template<typename T>
 void rt::Vector<T>::SetZ(const T& aZ)
 {
 	myZ = aZ;
 }
 
-
 template<typename T>
 void rt::Vector<T>::SetY(const T& aY)
 {
 	myY = aY;
 }
-
 
 template<typename T>
 rt::Vector<T>
