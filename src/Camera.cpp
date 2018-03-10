@@ -88,6 +88,8 @@ rt::Camera::PrivCalculateRays()
 
 	myCanvas.CanvasPixels.clear();
 
+	rt::Vector<float> yCameraAxis = myDirection.Cross(myTilt);
+
 	int canvasHeight = static_cast<int>(myCanvas.GetHeight());
 	int canvasWidth = static_cast<int>(myCanvas.GetWidth());
 	
@@ -95,11 +97,12 @@ rt::Camera::PrivCalculateRays()
 	{
 		for (int j = -canvasWidth / 2; j < canvasWidth / 2; j++)
 		{
-			auto x = j;
-			auto y = i;
-			auto z = myFocalDistance;
-			
-			CanvasPixel pixel(x, y, z);
+			CanvasPixel pixel(
+				myTilt.GetX() * j + yCameraAxis.GetX() * i + myDirection.GetX() * myFocalDistance, // x
+				myTilt.GetY() * j + yCameraAxis.GetY() * i + myDirection.GetY() * myFocalDistance, // y 
+				myTilt.GetZ() * j + yCameraAxis.GetZ() * i + myDirection.GetZ() * myFocalDistance // z
+			);
+
 			myCanvas.CanvasPixels.push_back(pixel);
 		}
 	}

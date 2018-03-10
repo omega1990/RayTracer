@@ -12,6 +12,7 @@ namespace rt
 	class Vector
 	{
 	public:
+		Vector();
 		Vector(const T& aX);
 		Vector(const T& aX, const T& aY, const T& aZ);
 
@@ -47,8 +48,15 @@ namespace rt
 		T myY; 
 		T myZ;
 	};
+}
 
 
+template<typename T>
+rt::Vector<T>::Vector()
+	: myX(0.0f)
+	, myY(0.0f)
+	, myZ(0.0f)
+{
 }
 
 template<typename T>

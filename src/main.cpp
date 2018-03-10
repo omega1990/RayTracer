@@ -41,23 +41,6 @@ SDLInit(
 	return {};
 }
 
-int 
-CreateRenderer(
-	bool &retflag)
-{
-	retflag = true;
-	renderer = SDL_CreateRenderer(window, -1, 0);
-
-	if (renderer == nullptr)
-	{
-		std::cout << "Failed to create renderer : " << SDL_GetError();
-		return 1;
-	}
-
-	retflag = false;
-	return {};
-}
-
 void 
 DrawPixel(
 	const rt::Color& aColor, 
@@ -85,7 +68,17 @@ int main(int argc, char* argv[])
 	world.myShapes.push_back(&plane5);
 	world.myShapes.push_back(&sphere1);
 
+	double light;
+	double closestDistance;
+	bool hit;
+	int width;
+	int height;
+	double distance;
+	rt::Vector<float> yCameraAxis;
+	rt::Color color;
+	Uint32 ticks = 0;
 
+	// Rendering 
 	bool retflag;
 	int retval = SDLInit(retflag);
 	if (retflag) return retval;
@@ -121,32 +114,19 @@ int main(int argc, char* argv[])
 		}
 
 		const rt::Canvas& canvas = camera.GetCanvas();
-		double distance = 0;
+		distance = 0;
+		width = 0;
+		height = static_cast<int>(canvas.GetHeight()) - 1;
 
-		int width = 0;
-		int height = static_cast<int>(canvas.GetHeight()) - 1;
-
-		auto cameraPosition = camera.GetPosition();
-
-		// I need camera axes in terms of world coordinates
-		rt::Vector<float> yCameraAxis = camera.GetDirection().Cross(camera.GetTilt());
-		float x, y, z;
-
+		auto a = SDL_GetTicks();
 		for (const auto& pixel : canvas.CanvasPixels)
 		{
-			// Before using the canvas pixels, its coordinates need to be translated
-			// to the world's coordinates 
-			x = camera.GetTilt().GetX() * pixel.X + yCameraAxis.GetX() * pixel.Y + camera.GetDirection().GetX() * pixel.Z;
-			y = camera.GetTilt().GetY() * pixel.X + yCameraAxis.GetY() * pixel.Y + camera.GetDirection().GetY() * pixel.Z;
-			z = camera.GetTilt().GetZ() * pixel.X + yCameraAxis.GetZ() * pixel.Y + camera.GetDirection().GetZ() * pixel.Z;
+			closestDistance = DBL_MAX;
 
-			double closestDistance = DBL_MAX;
-			double light;
-
-			bool hit = false;
+			hit = false;
 			for (auto& shape : world.myShapes)
 			{
-				if (shape->IsIntersecting(rt::Vector<float>(x, y, z), camera.GetPosition(), distance, light))
+				if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), camera.GetPosition(), distance, light))
 				{
 					if (distance > closestDistance)
 					{
@@ -155,13 +135,13 @@ int main(int argc, char* argv[])
 
 					closestDistance = distance;
 
-					auto color = shape->GetColor() * light + (distance / 8) ;
+					color = shape->GetColor() * light + (distance / 8) ;
 					DrawPixel(color, width, height);
 
 					hit = true;
 				}
 			}
-
+			
 			if (!hit)
 			{
 				DrawPixel(rt::Color::myPalette[rt::SKY], width, height);
@@ -174,12 +154,18 @@ int main(int argc, char* argv[])
 				height--;
 			}
 		}
-	
+
+		auto b = SDL_GetTicks();
+		std::cout << b - a << std::endl;
+
 		// TODO: Clearing
 		SDL_RenderPresent(renderer);
 
 		// Add a 16msec delay to make our game run at ~60 fps
-		SDL_Delay(16);
+		// SDL_Delay(16);
+
+		// std::cout << 60000 / (SDL_GetTicks() - ticks) << std::endl;
+		// ticks = SDL_GetTicks();
 	}
 
 	/* Shutdown all subsystems */
