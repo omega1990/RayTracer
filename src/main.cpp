@@ -1,4 +1,5 @@
 #include <iostream>
+#include <float.h>
 
 #include "SDL.h" 
 
