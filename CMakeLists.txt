@@ -5,8 +5,9 @@ project(RayTracer)
 include_directories(${MY_SOURCE_DIR}/src)
 include_directories(${MY_SOURCE_DIR}/inc)
 
+set (CMAKE_CXX_STANDARD 17)
+
 set(SRCS
-	
 src/Camera.cpp
 inc/Camera.hpp
 src/Color.cpp

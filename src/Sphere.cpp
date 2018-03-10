@@ -1,8 +1,9 @@
+#include <cmath>
+
 #include "../inc/Sphere.hpp"
 #include "../inc/Color.hpp"
 
 #define internal static
-
 
 rt::Sphere::Sphere(
 	const Vector<float>& aCenter, 

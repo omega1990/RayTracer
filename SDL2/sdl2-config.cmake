@@ -1,10 +1,20 @@
 set(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include")
 
+# Support Mac
+if (APPLE)
+  set(prefix "/usr/local/Cellar/sdl2/2.0.8") 
+  set(exec_prefix "${prefix}")
+  set(libdir "${exec_prefix}/lib")
+  set(SDL2_PREFIX "/usr/local/Cellar/sdl2/2.0.8")
+  set(SDL2_EXEC_PREFIX "/usr/local/Cellar/sdl2/2.0.8")
+  set(SDL2_LIBDIR "${exec_prefix}/lib")
+  set(SDL2_INCLUDE_DIRS "${prefix}/include/SDL2")
+  set(SDL2_LIBRARIES "-L${SDL2_LIBDIR}  -lSDL2 ")
+  string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
 # Support both 32 and 64 bit builds
-if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+elseif (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
   set(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2main.lib")
 else ()
   set(SDL2_LIBRARIES "${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2.lib;${CMAKE_CURRENT_LIST_DIR}/lib/x86/SDL2main.lib")
 endif ()
-
 string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)

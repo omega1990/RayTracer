@@ -1,0 +1,84 @@
+{
+  "variant": {
+    "label": "Debug",
+    "keywordSettings": {
+      "buildType": "debug"
+    },
+    "description": "Emit debug information without performing optimizations"
+  },
+  "activeEnvironments": [],
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "/Users/darkosupe/Repos/RayTracer/build",
+            "name": "RayTracer",
+            "sourceDirectory": "/Users/darkosupe/Repos/RayTracer",
+            "targets": [
+              {
+                "artifacts": [
+                  "/Users/darkosupe/Repos/RayTracer/build/RayTracer"
+                ],
+                "buildDirectory": "/Users/darkosupe/Repos/RayTracer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "inc/Camera.hpp",
+                      "inc/Color.hpp",
+                      "inc/Defaults.hpp",
+                      "inc/main.hpp",
+                      "inc/Plane.hpp",
+                      "inc/Point.hpp",
+                      "inc/Shape.hpp",
+                      "inc/Vector.hpp",
+                      "inc/World.hpp",
+                      "inc/Sphere.hpp"
+                    ]
+                  },
+                  {
+                    "compileFlags": "-g   -std=gnu++1z",
+                    "includePath": [
+                      {
+                        "path": "/src"
+                      },
+                      {
+                        "path": "/inc"
+                      },
+                      {
+                        "path": "/usr/local/Cellar/sdl2/2.0.8/include/SDL2"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/Camera.cpp",
+                      "src/Color.cpp",
+                      "src/main.cpp",
+                      "src/Plane.cpp",
+                      "src/Point.cpp",
+                      "src/Shape.cpp",
+                      "src/Sphere.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "RayTracer",
+                "linkLanguageFlags": "-g",
+                "linkLibraries": "-L/usr/local/Cellar/sdl2/2.0.8/lib  -lSDL2",
+                "linkerLanguage": "CXX",
+                "name": "RayTracer",
+                "sourceDirectory": "/Users/darkosupe/Repos/RayTracer",
+                "type": "EXECUTABLE"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.03848987893935507",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
+}
