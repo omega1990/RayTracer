@@ -23,6 +23,9 @@ src/Shape.cpp
 inc/Shape.hpp
 inc/Vector.hpp
 inc/World.hpp
+src/World.cpp
+inc/WorldDrawer.hpp
+src/WorldDrawer.cpp
 src/Sphere.cpp
 inc/Sphere.hpp
 )

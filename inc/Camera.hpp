@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "Vector.hpp"
 #include "Defaults.hpp"
 #include "Point.hpp"
@@ -13,13 +15,13 @@ namespace rt
 		Canvas(const float& aWidth, const float& aHeight);
 		std::vector<CanvasPixel> CanvasPixels;
 
-		float GetWidth() const;
-		float GetHeight() const;
+		uint32 GetWidth() const;
+		uint32 GetHeight() const;
 
 
 	private:
-		float myWidth = DEFAULT_CANVAS_WIDTH;
-		float myHeight = DEFAULT_CANVAS_HEIGHT;
+		uint32 myWidth  = DEFAULT_CANVAS_WIDTH;
+		uint32 myHeight = DEFAULT_CANVAS_HEIGHT;
 	};
 
 	class Camera

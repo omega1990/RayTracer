@@ -1,4 +1,5 @@
 #include "../inc/Camera.hpp"
+#include "../inc/Defaults.hpp"
 
 using namespace rt;
 
@@ -120,13 +121,13 @@ rt::Canvas::Canvas(
 {
 }
 
-float 
+uint32 
 rt::Canvas::GetWidth() const
 {
 	return myWidth;
 }
 
-float 
+uint32 
 rt::Canvas::GetHeight() const
 {
 	return myHeight;
