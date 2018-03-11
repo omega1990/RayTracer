@@ -1,11 +1,12 @@
 #include "../inc/WorldDrawer.hpp"
 
-
 rt::WorldDrawer::WorldDrawer(
 	SDL_Window*		aWindow, 
-	SDL_Renderer*	aRenderer)
+	SDL_Renderer*	aRenderer, 
+	SDL_Texture*	aTexture)
 	: myWindow(aWindow)
 	, myRenderer(aRenderer)
+	, myTexture(aTexture)
 {
 }
 
@@ -15,20 +16,23 @@ rt::WorldDrawer::DrawPixel(
 	const int&		 aX,
 	const int&		 aY)
 {
-	std::scoped_lock<std::mutex> lock(myMutex);
+	std::lock_guard<std::mutex> lk(myMutex);
 
 	SDL_SetRenderDrawColor(myRenderer, aColor.Red, aColor.Green, aColor.Blue, aColor.Alpha);
 	SDL_RenderDrawPoint(myRenderer, aX, aY);
 }
 
-void
+void 
 rt::WorldDrawer::DrawWorldParallel(
 	const rt::Camera&	aCamera,
 	const rt::World&	aWorld,
-	const uint32&		aStart,
-	const uint32&		aEnd)
+	uint32				aStart,
+	uint32				aEnd)
 {
 	const rt::Canvas& canvas = aCamera.GetCanvas();
+
+	std::vector<rt::DrawPixel> drawCanvas;
+
 
 	double		closestDistance = 0;
 	double		distance = 0;
@@ -59,6 +63,12 @@ rt::WorldDrawer::DrawWorldParallel(
 				closestDistance = distance;
 
 				color = shape->GetColor() * light + (distance / 8);
+				
+				/*{
+					std::lock_guard<std::mutex> lk(myMutex);
+					myDrawCanvas.push_back(rt::DrawPixel(color, width, height));
+				}*/
+
 				DrawPixel(color, width, height);
 
 				hit = true;
@@ -77,23 +87,26 @@ rt::WorldDrawer::DrawWorldParallel(
 			height--;
 		}
 	}
-
 }
-
 
 void
 rt::WorldDrawer::DrawWorld(
 	const rt::Camera& aCamera,
 	const rt::World& aWorld)
 {
-	auto a = SDL_GetTicks();
-
 	const rt::Canvas& canvas = aCamera.GetCanvas();
 
-	uint8 numberOfThreads = 4;
+	
+	void* mPixels;
+
+
+	myDrawCanvas = {};
+
+	uint8 numberOfThreads = 2;
 	int slice = canvas.CanvasPixels.size() / numberOfThreads;
 
-	// use X threads
+	auto a = SDL_GetTicks();
+	//use X threads
 	std::vector<std::thread> threads;
 	for (uint8 i = 0; i < numberOfThreads; i++)
 	{
@@ -104,8 +117,6 @@ rt::WorldDrawer::DrawWorld(
 	{
 		thread.join();
 	}
-
-	//DrawWorldParallel(aCamera, aWorld, 0, canvas.CanvasPixels.size());
 
 	auto b = SDL_GetTicks();
 	std::cout << b - a << std::endl;

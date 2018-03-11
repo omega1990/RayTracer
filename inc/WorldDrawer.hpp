@@ -1,11 +1,14 @@
 
 #include <SDL.h>
+#include <cuda_runtime.h>
+#include <cuda.h>
 
 #include <thread>
 #include <mutex>
 #include "../inc/Defaults.hpp"
 #include "../inc/Camera.hpp"
 #include "../inc/World.hpp"
+#include "../inc/DrawPixel.hpp"
 
 namespace rt
 {
@@ -13,18 +16,20 @@ namespace rt
 	{
 	public:
 		WorldDrawer(				SDL_Window*			aWindow,
-									SDL_Renderer*		aRenderer);
+									SDL_Renderer*		aRenderer,
+									SDL_Texture*		aTexture);
 
 		void DrawPixel(				const rt::Color&	aColor, 
 									const int&			aX, 
 									const int&			aY);
 
-		void DrawWorldParallel(		const rt::Camera&	aCamera,
-									const rt::World&	aWorld,
-									const uint32&		aStart,
-									const uint32&		aEnd);
+		void DrawWorldParallel(
+									const rt::Camera&	aCamera, 
+									const rt::World&	aWorld, 
+									uint32				aStart, 
+									uint32				aEnd);
 
-		void DrawWorld(				const rt::Camera&	aCamera, 
+		void DrawWorld(				const rt::Camera&	aCamera,
 									const rt::World&	aWorld);
 
 	private: 
@@ -32,6 +37,8 @@ namespace rt
 
 		SDL_Window*		myWindow;
 		SDL_Renderer*	myRenderer;
+		SDL_Texture*	myTexture;
 
+		std::vector<rt::DrawPixel> myDrawCanvas;
 	};
 }

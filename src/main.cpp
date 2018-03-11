@@ -15,6 +15,7 @@
 
 SDL_Window* window;
 SDL_Renderer* renderer;
+SDL_Texture* screenTexture;
 
 int 
 SDLInit(
@@ -76,7 +77,8 @@ int main(int argc, char* argv[])
 	int retval = SDLInit(retflag);
 	if (retflag) return retval;
 
-	rt::WorldDrawer drawer(window, renderer);
+	screenTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, camera.GetCanvas().GetWidth(), camera.GetCanvas().GetHeight());
+	rt::WorldDrawer drawer(window, renderer, screenTexture);
 
 	bool loop = true;
 	while (loop)

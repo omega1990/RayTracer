@@ -1,11 +1,15 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.8)
 
-project(RayTracer)
+set(CMAKE_CUDA_COMPILER
+"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/bin/nvcc.exe")
+set(CMAKE_CXX_COMPILER
+"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.11.25503/bin/HostX64/x64/cl.exe")
+
+project(RayTracer LANGUAGES CXX CUDA)
+set (CMAKE_CXX_STANDARD 17)
 
 include_directories(${MY_SOURCE_DIR}/src)
 include_directories(${MY_SOURCE_DIR}/inc)
-
-set (CMAKE_CXX_STANDARD 17)
 
 set(SRCS
 src/Camera.cpp
@@ -26,6 +30,8 @@ inc/World.hpp
 src/World.cpp
 inc/WorldDrawer.hpp
 src/WorldDrawer.cpp
+inc/DrawPixel.hpp
+src/DrawPixel.cpp
 src/Sphere.cpp
 inc/Sphere.hpp
 )
@@ -36,12 +42,32 @@ SDL2)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-add_executable (RayTracer ${SRCS})
+find_package(CUDA REQUIRED)
+
+cuda_add_executable(RayTracer ${SRCS})
+
+######################################################################################
+
+
 target_link_libraries(RayTracer ${SDL2_LIBRARIES})
 
 add_custom_command(TARGET RayTracer 
 		   POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
-                       ${CMAKE_SOURCE_DIR}/SDL2/lib/x86/SDL2.dll $<TARGET_FILE_DIR:RayTracer>)
+                       ${CMAKE_SOURCE_DIR}/SDL2/lib/x64/SDL2.dll $<TARGET_FILE_DIR:RayTracer>)
 
+#add_custom_command(TARGET RayTracer 
+#		   POST_BUILD
+#                   COMMAND ${CMAKE_COMMAND} -E copy
+#                       ${CMAKE_SOURCE_DIR}/CUDA/freeglut.dll $<TARGET_FILE_DIR:RayTracer>)
+#
+#add_custom_command(TARGET RayTracer 
+#		   POST_BUILD
+#                   COMMAND ${CMAKE_COMMAND} -E copy
+#                       ${CMAKE_SOURCE_DIR}/CUDA/FreeImage.dll $<TARGET_FILE_DIR:RayTracer>)
+#
+#add_custom_command(TARGET RayTracer 
+#		   POST_BUILD
+#                   COMMAND ${CMAKE_COMMAND} -E copy
+#                       ${CMAKE_SOURCE_DIR}/CUDA/glew64.dll $<TARGET_FILE_DIR:RayTracer>)
 
