@@ -13,6 +13,16 @@ namespace rt
 		void AddShape(const T& aShape);
 
 		std::vector<std::shared_ptr<Shape>> myShapes = {};
+
+		World() {};
+		World(const World& world)
+		{
+			myShapes = world.myShapes;
+		}
+		World(World&& world)
+		{
+			myShapes = std::move(world.myShapes);
+		}
 	};
 }
 

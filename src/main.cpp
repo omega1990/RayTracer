@@ -45,7 +45,7 @@ SDLInit(
 	return {};
 }
 
-std::shared_ptr<rt::World> 
+rt::World
 GenerateWorld()
 {
 	rt::World world;
@@ -63,14 +63,13 @@ GenerateWorld()
 	world.AddShape(plane5);
 	world.AddShape(sphere1);
 
-	return std::make_shared<rt::World>(world);
+	return std::move(world);
 }
 
 int main(int argc, char* argv[])
 {
 	rt::Camera camera;
-	std::shared_ptr<rt::World> world = GenerateWorld();
-
+	rt::World world = GenerateWorld();
 
 	// Rendering 
 	bool retflag;
@@ -110,7 +109,7 @@ int main(int argc, char* argv[])
 			}
 		}
 		
-		drawer.DrawWorld(camera, *world);
+		drawer.DrawWorld(camera, world);
 
 		SDL_RenderPresent(renderer);
 

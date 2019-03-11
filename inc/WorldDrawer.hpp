@@ -1,7 +1,5 @@
 
 #include <SDL.h>
-#include <cuda_runtime.h>
-#include <cuda.h>
 
 #include <thread>
 #include <mutex>

@@ -95,10 +95,7 @@ rt::WorldDrawer::DrawWorld(
 	const rt::World& aWorld)
 {
 	const rt::Canvas& canvas = aCamera.GetCanvas();
-
-	
 	void* mPixels;
-
 
 	myDrawCanvas = {};
 
