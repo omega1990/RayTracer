@@ -23,7 +23,6 @@ namespace rt
 							Vector<float>& aSurfaceNormal) const override;
 
 	private:
-		Vector<float> myCenter{ 0.0f, 0.0f, 0.0f };
 		float myRadius = 5.0f;
 	};
 }

@@ -29,7 +29,7 @@ SDLInit(
 		return -1;
 	}
 
-	std::cout << "SDL initalized." << SDL_GetError() << std::endl;
+	std::cout << "SDL initialized." << SDL_GetError() << std::endl;
 
 	if (SDL_CreateWindowAndRenderer(
 		DEFAULT_CANVAS_HEIGHT,
@@ -46,42 +46,24 @@ SDLInit(
 	return {};
 }
 
-rt::World
-GenerateWorld()
+rt::World* GenerateWorld()
 {
-	rt::World world;
-	rt::Shape* plane1 = new rt::Plane(rt::Vector<float>(0.0f, 1.0f, 0.0f), rt::Vector<float>(0.0f, -40.0f, 0.0f), rt::ColorName::DARK_GREY, materials::bronze);
-	rt::Shape* sphere1 = new rt::Sphere(rt::Vector<float>(90.f, 60.f, 55.f), 50.f, rt::CHROME, materials::chrome);
-	rt::Shape* sphere2  = new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze);
-	/*rt::Plane plane2(rt::Vector<float>(-1.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane3(rt::Vector<float>(1.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
-	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 470.0f), rt::ColorName::GREY);
-*/
-	world.AddShape(plane1);
-	//world.AddShape(plane2);
-	//world.AddShape(plane3);
-	//world.AddShape(plane4);
-	//world.AddShape(plane5);
+	rt::World* world = new rt::World();
+	
+	world->AddShape(new rt::Plane(rt::Vector<float>(0.0f, 1.0f, 0.0f), rt::Vector<float>(0.0f, -40.0f, 0.0f), rt::ColorName::DARK_GREY, materials::bronze));
 
-	rt::LightSource light(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f);
+	world->AddShape(new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze));
+	world->AddShape(new rt::Sphere(rt::Vector<float>(90.f, 60.f, 55.f), 50.f, rt::CHROME, materials::chrome));
 
-	//rt::LightSource light2(rt::Vector<float>(-100.f, 170.f, 30.f), 20.f);
+	world->AddLight(new rt::LightSource(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f));
 
-
-	world.AddShape(sphere1);
-	world.AddShape(sphere2);
-	world.AddLight(light);
-	//world.AddLight(light2);
-
-
-	return std::move(world);
+	return world;
 }
 
 int main(int argc, char* argv[])
 {
 	rt::Camera camera;
-	rt::World world = GenerateWorld();
+	rt::World* world = GenerateWorld();
 
 	// Temporary
 	float x = 0.f;
@@ -90,13 +72,12 @@ int main(int argc, char* argv[])
 	float radius = 300.f;
 	float angle = 0.f;
 
-	float x1 = 0.f;
-	float y1 = 10.f;
-	float z1 = 50.f;
-	float radius1 = 300.f;
-	float angle1 = 90.f;
+	float angle1 = M_PI / 2.f;
+	float angle2 = angle1 + M_PI;
+	float radius1 = 20.f;
 
-
+	rt::VectorF positionOne;
+	rt::VectorF positionTwo;
 
 	// Rendering 
 	bool retflag;
@@ -140,15 +121,29 @@ int main(int argc, char* argv[])
 
 		SDL_RenderPresent(renderer);
 		
-		angle -= 0.1f;
-		angle1 -= 0.1f;
+		world->myLightSources[0]->myPosition.SetX(x + std::cosf(angle)*radius);
+		world->myLightSources[0]->myPosition.SetZ(z + std::sinf(angle)*radius);
 
-		world.myLightSources[0].myPosition.SetX(x + std::cosf(angle)*radius);
-		world.myLightSources[0].myPosition.SetZ(z + std::sinf(angle)*radius);
+		//positionOne = world->myShapes[1]->GetPosition();
+		//positionOne.SetX(positionOne.GetX() + std::cosf(angle1) * radius1);
+		//positionOne.SetZ(positionOne.GetZ() + std::sinf(angle1) * radius1);
+		//world->myShapes[1]->SetPosition(positionOne);
+
+		//positionTwo = world->myShapes[2]->GetPosition();
+		//positionTwo.SetX(positionTwo.GetX() + std::cosf(angle2) * radius1);
+		//positionTwo.SetZ(positionTwo.GetZ() + std::sinf(angle2) * radius1);
+		//world->myShapes[2]->SetPosition(positionTwo);
+
+		angle -= 0.05f;
+		angle1 += 0.1f;
+		angle2 = angle1 + 3.14f;
 
 		//world.myLightSources[1].myPosition.SetX(z + std::cosf(angle1)*radius);
 		//world.myLightSources[1].myPosition.SetZ(z + std::sinf(angle1)*radius);
 	}
+
+	delete world;
+	world = nullptr;
 
 	/* Shutdown all subsystems */
 	SDL_DestroyRenderer(renderer);

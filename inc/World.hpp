@@ -24,24 +24,37 @@ namespace rt
 			myLightSources = std::move(world.myLightSources);
 		}
 
+		~World()
+		{
+			for (auto& shape : myShapes)
+			{
+				delete shape;
+				shape = nullptr;
+			}
+
+			for (auto& light : myLightSources)
+			{
+				delete light;
+				light = nullptr;
+			}
+		}
+
 		template <typename T>
 		void AddShape(T* aShape);
 
-		void AddLight(const rt::LightSource& aLightSource)
+		void AddLight(rt::LightSource* aLightSource)
 		{
-			myLightSources.push_back(aLightSource);
+			myLightSources.push_back(std::move(aLightSource));
 		}
 
 		std::vector<rt::Shape*> myShapes = {};
-		std::vector<rt::LightSource> myLightSources = {};
+		std::vector<rt::LightSource*> myLightSources = {};
 	};
 }
 
 
 template <typename T>
-void
-rt::World::AddShape(
-	T* aShape)
+void rt::World::AddShape(T* aShape)
 {
 	myShapes.push_back(std::move(aShape));
 }

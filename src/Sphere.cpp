@@ -10,43 +10,12 @@ rt::Sphere::Sphere(
 	const float&		 aRadius,
 	const rt::Color&	 aColor, 
 	const Material&		 aMaterial)
-	: myCenter(aCenter)
-	, myRadius(aRadius)
-	, Shape(aColor)
+	: myRadius(aRadius)
+	, Shape(aCenter, aColor)
 {
 	static float z = 50.f;
 	// TODO
 	myMaterial = aMaterial;
-}
-
-internal 
-bool SolveQuadratic(
-	const float&a, 
-	const float&b, 
-	const float&c, 
-	float& x0, 
-	float& x1)
-{
-	float discr = b * b - 4 * a * c;
-	if (discr < 0)
-	{
-		return false;
-	}
-	else if (discr == 0)
-	{
-		x0 = x1 = -0.5 * b / a;
-	}
-	else 
-	{
-		float q = (b > 0) ?
-			-0.5f * (b + sqrt(discr)) :
-			-0.5f * (b - sqrt(discr));
-		x0 = q / a;
-		x1 = c / q;
-	}
-	if (x0 > x1) std::swap(x0, x1);
-
-	return true;
 }
 
 bool 
@@ -58,21 +27,21 @@ rt::Sphere::IsIntersecting(
 	Vector<float>& aOutSurfaceNormal) const
 {
 	auto D = aRayVector.Normalize();
-				  
-	Vector<float> L = myCenter - aRayOrigin;
+
+	Vector<float> L = myPosition - aRayOrigin;
 	float Tca = L * D;
 	if (Tca < 0)
 	{
-		return false;
+		return false; // behind canvas
 	}
 
-	float d = sqrtf((L*L) - (Tca*Tca));
+	float d = sqrtf(powf(L.Length(),2) - powf(Tca, 2));
 	if (d > myRadius)
 	{
-		return false;
+		return false; // no intersection
 	}
 
-	float Thc = sqrtf(myRadius * myRadius - d * d);
+	float Thc = sqrtf(powf(myRadius, 2) - powf(d,2));
 	float t0 = Tca - Thc;
 	float t1 = Tca + Thc;
 	if (t1 < t0)
@@ -81,7 +50,9 @@ rt::Sphere::IsIntersecting(
 	}
 
 	aOutHitPosition = aRayOrigin + D * t0;
-	aOutSurfaceNormal = (aOutHitPosition - myCenter).Normalize();
+	aOutSurfaceNormal = (aOutHitPosition - myPosition).Normalize();
+
+	aOutDistance = (aOutHitPosition - aRayOrigin).Length();
 
 	return true;
 }

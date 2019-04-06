@@ -42,6 +42,8 @@ inc/Debug.h
 src/Debug.cpp
 inc/Material.h
 src/Material.cpp
+inc/Reflection.h
+src/Reflection.cpp
 )
 
 set(SDL2_DIR

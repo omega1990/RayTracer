@@ -22,7 +22,18 @@ const Material& rt::Shape::GetMaterial() const
 	return myMaterial;
 }
 
-rt::Shape::Shape()
+const rt::VectorF& rt::Shape::GetPosition() const
+{
+	return myPosition;
+}
+
+const void rt::Shape::SetPosition(const rt::VectorF& aPosition)
+{
+	myPosition = aPosition;
+}
+
+rt::Shape::Shape(const VectorF& aPosition)
+	: myPosition(aPosition)
 {
 }
 
@@ -30,10 +41,13 @@ rt::Shape::Shape(const Shape&& aShape)
 {
 	this->myColor = std::move(aShape.myColor);
 	this->myMaterial = std::move(aShape.myMaterial);
+	this->myPosition = std::move(aShape.myPosition);
 }
 
 rt::Shape::Shape(
+	const VectorF& aPosition,
 	const Color & aColor)
 	: myColor(aColor)
+	, myPosition(aPosition)
 {
 }

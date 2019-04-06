@@ -2,7 +2,8 @@
 
 #include "../inc/Plane.hpp"
 
-rt::Plane::Plane()
+rt::Plane::Plane(const Vector<float>& aPoint)
+	:Shape(aPoint)
 {
 }
 
@@ -12,19 +13,19 @@ rt::Plane::Plane(
 	const Color&		 aColor, 
 	const Material&		 aMaterial)
 	: myNormalVector(aNorm)
-	, myPoint(aPoint)
-	, Shape(aColor)
+	, Shape(aPoint, aColor)
 {
 	myMaterial = aMaterial;
+	myPosition = aPoint;
 }
 
-rt::Plane::Plane(
-	const Color& aColor,
-	const Material& aMaterial)
-	: Shape(aColor)
-{
-	myMaterial = aMaterial;
-}
+//rt::Plane::Plane(
+//	const Color& aColor,
+//	const Material& aMaterial)
+//	: Shape(aColor)
+//{
+//	myMaterial = aMaterial;
+//}
 
 bool 
 rt::Plane::IsIntersecting(
@@ -50,7 +51,7 @@ rt::Plane::IsIntersecting(
 
 		////aOutDistance = p0l0 * aOutSurfaceNormal / denom;
 
-		aOutDistance = (aOutSurfaceNormal * (myPoint - aRayOrigin)) / (aOutSurfaceNormal * ray);
+		aOutDistance = (aOutSurfaceNormal * (myPosition - aRayOrigin)) / (aOutSurfaceNormal * ray);
 		aOutHitPosition = aRayOrigin + (ray * aOutDistance);
 
 		const VectorF p0l0 = aOutHitPosition - aRayOrigin;

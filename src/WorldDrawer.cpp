@@ -2,6 +2,7 @@
 #include "../inc/WorldDrawer.hpp"
 #include "../inc/ScopedPerfTracker.h"
 #include "../inc/Shading.h"
+#include "../inc/Reflection.h"
 
 
 rt::WorldDrawer::WorldDrawer(
@@ -29,7 +30,7 @@ rt::WorldDrawer::DrawPixel(
 void 
 rt::WorldDrawer::DrawWorldParallel(
 	const rt::Camera&	aCamera,
-	const rt::World&	aWorld,
+	const rt::World*	aWorld,
 	uint32				aStart,
 	uint32				aEnd)
 {
@@ -56,29 +57,29 @@ rt::WorldDrawer::DrawWorldParallel(
 
 		closestDistance = INT_MAX;
 
-		hit = false;
-		for (auto& shape : aWorld.myShapes)
+		rt::Shape* shapeToDraw = nullptr;
+
+		for (auto& shape : aWorld->myShapes)
 		{
 			if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), aCamera.GetPosition(), distance, rayHitPosition, hitSurfaceNormal))
 			{
-				if (distance > closestDistance)
+				if (distance <= closestDistance)
 				{
-					continue;
-				}
-
-				closestDistance = distance;
-
-				color = shape->GetColor();
-				phongShading.GetPixelShade(shape->GetMaterial(), shape, aWorld.myShapes, aWorld.myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
-
-				
-				DrawPixel(color, width, height);
-
-				hit = true;
+					closestDistance = distance;
+					shapeToDraw = shape;
+				}				
 			}
 		}
 
-		if (!hit)
+		if (shapeToDraw)
+		{
+			color = shapeToDraw->GetColor();
+			phongShading.GetPixelShade(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+			Reflection::GetPixelReflection(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+	
+			DrawPixel(color, width, height);
+		}
+		else
 		{
 			DrawPixel(rt::Color::myPalette[rt::SKY], width, height);
 		}
@@ -95,8 +96,11 @@ rt::WorldDrawer::DrawWorldParallel(
 void
 rt::WorldDrawer::DrawWorld(
 	const rt::Camera& aCamera,
-	const rt::World& aWorld)
+	const rt::World* aWorld)
 {
+	if (!aWorld)
+		return; 
+
 	ScopedPerfTracker tracker("name");
 	const rt::Canvas& canvas = aCamera.GetCanvas();
 
@@ -117,9 +121,4 @@ rt::WorldDrawer::DrawWorld(
 	{
 		thread.join();
 	}
-
-	//DrawWorldParallel(aCamera, aWorld, 0, canvas.CanvasPixels.size());
-
-	/*auto b = SDL_GetTicks();
-	std::cout << b - a << std::endl;*/
 }

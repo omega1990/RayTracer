@@ -57,6 +57,15 @@ rt::Color::operator*(const float& aNum) const
 	return Color(red, green, blue, Alpha);
 }
 
+const rt::Color rt::Color::operator+(const Color& aColor) const
+{
+	uint8 red = Red + aColor.Red < 255 ? (uint8)(Red * aColor.Red) : 255;
+	uint8 green = Green + aColor.Green < 255 ? (uint8)(Green * aColor.Green) : 255;
+	uint8 blue = Blue + aColor.Blue < 255 ? (uint8)(Blue * aColor.Blue) : 255;
+
+	return Color(red, green, blue, Alpha);
+}
+
 std::map<rt::ColorName, rt::Color> rt::Color::myPalette =
 {
 	{rt::RED, Color(255, 0, 0, 255)},

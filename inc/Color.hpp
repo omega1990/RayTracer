@@ -35,8 +35,10 @@ namespace rt
 			const rt::ColorName& aColor);
 
 		const Color operator-(const float& aNum) const;
-		const Color operator+(const float & aNum) const;
-		const Color operator*(const float & aNum) const;
+		const Color operator+(const float& aNum) const;
+		const Color operator*(const float& aNum) const;
+		const Color operator+(const Color& aColor) const;
+
 
 		static std::map<ColorName, Color> myPalette;
 
