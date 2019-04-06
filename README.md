@@ -20,4 +20,4 @@ cmake -G "Visual Studio 15 2017 Win64" -H. -Bbuild -T v140
 * Within VS Code press Command + Shift + P and run **CMake: Build a Target** (Choose RayCaster)
 
 
-![alt text](phong4.gif)
+![alt text](phong5.gif)
