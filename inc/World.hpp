@@ -1,28 +1,39 @@
 #pragma once
 
+#include "Shape.hpp"
+#include "SDL.h"
+#include "LightSource.h"
+
 #include <memory>
 
-#include "Shape.hpp"
 
 namespace rt
 {
 	class World
 	{
 	public:
-		template <typename T>
-		void AddShape(const T& aShape);
-
-		std::vector<std::shared_ptr<Shape>> myShapes = {};
-
 		World() {};
 		World(const World& world)
 		{
 			myShapes = world.myShapes;
+			myLightSources = world.myLightSources;
 		}
 		World(World&& world)
 		{
 			myShapes = std::move(world.myShapes);
+			myLightSources = std::move(world.myLightSources);
 		}
+
+		template <typename T>
+		void AddShape(T* aShape);
+
+		void AddLight(const rt::LightSource& aLightSource)
+		{
+			myLightSources.push_back(aLightSource);
+		}
+
+		std::vector<rt::Shape*> myShapes = {};
+		std::vector<rt::LightSource> myLightSources = {};
 	};
 }
 
@@ -30,7 +41,7 @@ namespace rt
 template <typename T>
 void
 rt::World::AddShape(
-	const T& aShape)
+	T* aShape)
 {
-	myShapes.push_back(std::make_shared<T>(aShape));
+	myShapes.push_back(std::move(aShape));
 }

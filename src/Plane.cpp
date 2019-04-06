@@ -9,39 +9,55 @@ rt::Plane::Plane()
 rt::Plane::Plane(
 	const Vector<float>& aNorm, 
 	const Vector<float>& aPoint, 
-	const Color&		 aColor)
+	const Color&		 aColor, 
+	const Material&		 aMaterial)
 	: myNormalVector(aNorm)
 	, myPoint(aPoint)
 	, Shape(aColor)
 {
+	myMaterial = aMaterial;
 }
 
 rt::Plane::Plane(
-	const Color&		 aColor)
+	const Color& aColor,
+	const Material& aMaterial)
 	: Shape(aColor)
 {
+	myMaterial = aMaterial;
 }
 
 bool 
 rt::Plane::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin,
-	double&				 aOutDistance,
-	double&				 aLight)
+	float&				 aOutDistance,
+	Vector<float>& aOutHitPosition,
+	Vector<float>& aOutSurfaceNormal) const
 {
-	auto line = aRayVector + aRayOrigin;
-	auto normal = myNormalVector.Normalize();
-	auto ray = aRayVector.Normalize();	
+	//auto line = aRayVector + aRayOrigin;
+	aOutSurfaceNormal = myNormalVector;
+	const auto ray = aRayVector.Normalize();	
 
-	float denom = normal * ray;
+	float denom = aOutSurfaceNormal * ray;
 	if (std::abs(denom) > 1e-6) // How far do I want to display this 
 	{
-		Vector<float> p0l0 = myPoint - aRayOrigin;
-		aOutDistance = p0l0 * normal / denom;
-		// Shading hack
-		aLight = 1;
-		return (aOutDistance >= 0);
+		// Compute the X value for the directed line ray intersecting the plane
+		//const float d = aOutSurfaceNormal * myPoint;
+		//const float x = (d - (aOutSurfaceNormal * aRayOrigin)) / (aOutSurfaceNormal * aRayVector);
+		//// output contact point
+		//aOutHitPosition = aRayOrigin + ray * x; //Make sure your ray vector is normalized
+		//aOutDistance = (aOutHitPosition - aRayOrigin).Length();
+
+		////aOutDistance = p0l0 * aOutSurfaceNormal / denom;
+
+		aOutDistance = (aOutSurfaceNormal * (myPoint - aRayOrigin)) / (aOutSurfaceNormal * ray);
+		aOutHitPosition = aRayOrigin + (ray * aOutDistance);
+
+		const VectorF p0l0 = aOutHitPosition - aRayOrigin;
+		float t = (p0l0 * aOutSurfaceNormal) / denom;
+		return (t >= 0);
 	}
 
+	
 	return false;
 }

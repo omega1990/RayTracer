@@ -11,6 +11,7 @@
 #include "../inc/Camera.hpp"
 #include "../inc/World.hpp"
 #include "../inc/WorldDrawer.hpp"
+#include "../inc/LightSource.h"
 #include "../inc/main.hpp"
 
 SDL_Window* window;
@@ -49,19 +50,30 @@ rt::World
 GenerateWorld()
 {
 	rt::World world;
-	rt::Plane plane1(rt::ColorName::GREY);
-	rt::Sphere sphere1(rt::Vector<float>(0.0f, 10.0f, 50.0f), 70.0f, rt::SPHERE);
-	rt::Plane plane2(rt::Vector<float>(-1.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
+	rt::Shape* plane1 = new rt::Plane(rt::Vector<float>(0.0f, 1.0f, 0.0f), rt::Vector<float>(0.0f, -40.0f, 0.0f), rt::ColorName::DARK_GREY, materials::bronze);
+	rt::Shape* sphere1 = new rt::Sphere(rt::Vector<float>(90.f, 60.f, 55.f), 50.f, rt::CHROME, materials::chrome);
+	rt::Shape* sphere2  = new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze);
+	/*rt::Plane plane2(rt::Vector<float>(-1.0f, 0.0f, 0.0f), rt::Vector<float>(150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane3(rt::Vector<float>(1.0f, 0.0f, 0.0f), rt::Vector<float>(-150.0f, 0.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane4(rt::Vector<float>(0.0f, -1.0f, 0.0f), rt::Vector<float>(0.0f, 300.0f, 0.0f), rt::ColorName::GREY);
 	rt::Plane plane5(rt::Vector<float>(0.0f, 0.0f, 1.0f), rt::Vector<float>(0.0f, 0.0f, 470.0f), rt::ColorName::GREY);
-
+*/
 	world.AddShape(plane1);
-	world.AddShape(plane2);
-	world.AddShape(plane3);
-	world.AddShape(plane4);
-	world.AddShape(plane5);
+	//world.AddShape(plane2);
+	//world.AddShape(plane3);
+	//world.AddShape(plane4);
+	//world.AddShape(plane5);
+
+	rt::LightSource light(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f);
+
+	//rt::LightSource light2(rt::Vector<float>(-100.f, 170.f, 30.f), 20.f);
+
+
 	world.AddShape(sphere1);
+	world.AddShape(sphere2);
+	world.AddLight(light);
+	//world.AddLight(light2);
+
 
 	return std::move(world);
 }
@@ -70,6 +82,21 @@ int main(int argc, char* argv[])
 {
 	rt::Camera camera;
 	rt::World world = GenerateWorld();
+
+	// Temporary
+	float x = 0.f;
+	float y = 10.f;
+	float z = 50.f;
+	float radius = 300.f;
+	float angle = 0.f;
+
+	float x1 = 0.f;
+	float y1 = 10.f;
+	float z1 = 50.f;
+	float radius1 = 300.f;
+	float angle1 = 90.f;
+
+
 
 	// Rendering 
 	bool retflag;
@@ -112,9 +139,15 @@ int main(int argc, char* argv[])
 		drawer.DrawWorld(camera, world);
 
 		SDL_RenderPresent(renderer);
+		
+		angle -= 0.1f;
+		angle1 -= 0.1f;
 
-		// Add a 16msec delay to make our game run at ~60 fps
-		// SDL_Delay(16);
+		world.myLightSources[0].myPosition.SetX(x + std::cosf(angle)*radius);
+		world.myLightSources[0].myPosition.SetZ(z + std::sinf(angle)*radius);
+
+		//world.myLightSources[1].myPosition.SetX(z + std::cosf(angle1)*radius);
+		//world.myLightSources[1].myPosition.SetZ(z + std::sinf(angle1)*radius);
 	}
 
 	/* Shutdown all subsystems */

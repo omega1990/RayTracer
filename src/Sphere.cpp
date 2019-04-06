@@ -8,11 +8,15 @@
 rt::Sphere::Sphere(
 	const Vector<float>& aCenter, 
 	const float&		 aRadius,
-	const rt::Color&	 aColor)
+	const rt::Color&	 aColor, 
+	const Material&		 aMaterial)
 	: myCenter(aCenter)
 	, myRadius(aRadius)
 	, Shape(aColor)
 {
+	static float z = 50.f;
+	// TODO
+	myMaterial = aMaterial;
 }
 
 internal 
@@ -35,8 +39,8 @@ bool SolveQuadratic(
 	else 
 	{
 		float q = (b > 0) ?
-			-0.5 * (b + sqrt(discr)) :
-			-0.5 * (b - sqrt(discr));
+			-0.5f * (b + sqrt(discr)) :
+			-0.5f * (b - sqrt(discr));
 		x0 = q / a;
 		x1 = c / q;
 	}
@@ -49,8 +53,9 @@ bool
 rt::Sphere::IsIntersecting(
 	const Vector<float>& aRayVector, 
 	const Vector<float>& aRayOrigin, 
-	double& aOutDistance,
-	double& aLight)
+	float& aOutDistance,
+	Vector<float>& aOutHitPosition,
+	Vector<float>& aOutSurfaceNormal) const
 {
 	auto D = aRayVector.Normalize();
 				  
@@ -75,11 +80,8 @@ rt::Sphere::IsIntersecting(
 		t0 = t1;
 	}
 
-	aOutDistance = t0;
-
-	// Hack for shading
-	rt::Vector<float> Phit = aRayOrigin + D * t0;
-	aLight = std::abs(D * (Phit - myCenter).Normalize());
+	aOutHitPosition = aRayOrigin + D * t0;
+	aOutSurfaceNormal = (aOutHitPosition - myCenter).Normalize();
 
 	return true;
 }

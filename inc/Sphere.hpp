@@ -3,6 +3,7 @@
 #include "Color.hpp"
 #include "Vector.hpp"
 #include "Shape.hpp"
+#include "Material.h"
 
 namespace rt
 {
@@ -12,12 +13,14 @@ namespace rt
 
 		Sphere(				const Vector<float>& aCenter,
 							const float&		 aRadius,
-							const rt::Color&	 aColor);
+							const rt::Color&	 aColor,
+							const Material&		 aMaterial);
 
 		bool IsIntersecting(const Vector<float>& aRayVector,
 							const Vector<float>& aRayOrigin,
-							double&				 aOutDistance,
-							double&				 aLight) override;
+							float&				 aOutDistance,
+							Vector<float>& aOutHitPosition,
+							Vector<float>& aSurfaceNormal) const override;
 
 	private:
 		Vector<float> myCenter{ 0.0f, 0.0f, 0.0f };

@@ -8,6 +8,7 @@
 
 namespace rt
 {
+
 	template <typename T>
 	class Vector
 	{
@@ -36,18 +37,24 @@ namespace rt
 		Vector<T> operator-  (const Vector<T>& aVector)	const;
 		Vector<T> Cross		 (const Vector<T>& aVector) const;
 		Vector<T> Normalize() const;
+		T		  GetMaxDot	 (const Vector<T>& aVector) const;
+		T		  DotProduct(const Vector<T> aVector1, const Vector<T> aVector2) const;
+		T		  Length() const;
+
 				
 		friend std::ostream& operator<< (std::ostream& aOs, const Vector<T>& aV)
 		{
 			aOs << aV.myX << " " << aV.myY << " " << aV.myZ;
 			return aOs;
 		}
-
 	private:
 		T myX;
 		T myY; 
 		T myZ;
 	};
+
+	typedef Vector<float> VectorF;
+
 }
 
 
@@ -211,4 +218,29 @@ rt::Vector<T>::Normalize() const
 	auto z = myZ / length;
 
 	return Vector<T>(x, y, z);
+}
+
+template<typename T>
+T
+rt::Vector<T>::GetMaxDot(const rt::Vector<T>& aVector) const
+{
+	T dotProduct = *this * aVector;
+	if (dotProduct < 0.f)
+		return 0.f;
+
+	return dotProduct;
+}
+
+template<typename T>
+T
+rt::Vector<T>::DotProduct(const rt::Vector<T> aVector1, const rt::Vector<T> aVector2) const
+{
+	return aVector1.myX * aVector2.myX + aVector1.myY * aVector2.myY + aVector1.myZ * aVector2.myZ;
+}
+
+template<typename T>
+T
+rt::Vector<T>::Length() const
+{
+	return std::sqrt((myX * myX) + (myY * myY) + (myZ * myZ));
 }

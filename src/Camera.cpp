@@ -1,5 +1,6 @@
 #include "../inc/Camera.hpp"
 #include "../inc/Defaults.hpp"
+#include "../inc/ScopedPerfTracker.h"
 
 using namespace rt;
 
@@ -83,6 +84,7 @@ rt::Camera::MoveLeft(
 void 
 rt::Camera::PrivCalculateRays()
 {
+	ScopedPerfTracker tracker(__FUNCTION__);
 	// Pixels are calculated in the local coordinate system
 	// Important: For using this, it needs to be converted 
 	// to the world coordinates

@@ -31,7 +31,17 @@ src/WorldDrawer.cpp
 inc/DrawPixel.hpp
 src/DrawPixel.cpp
 src/Sphere.cpp
+src/ScopedPerfTracker.cpp
+inc/ScopedPerfTracker.h
 inc/Sphere.hpp
+src/LightSource.cpp
+inc/LightSource.h
+inc/Shading.h
+src/Shading.cpp
+inc/Debug.h
+src/Debug.cpp
+inc/Material.h
+src/Material.cpp
 )
 
 set(SDL2_DIR

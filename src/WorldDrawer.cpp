@@ -1,4 +1,8 @@
+
 #include "../inc/WorldDrawer.hpp"
+#include "../inc/ScopedPerfTracker.h"
+#include "../inc/Shading.h"
+
 
 rt::WorldDrawer::WorldDrawer(
 	SDL_Window*		aWindow, 
@@ -33,27 +37,29 @@ rt::WorldDrawer::DrawWorldParallel(
 
 	std::vector<rt::DrawPixel> drawCanvas;
 
-
-	double		closestDistance = 0;
-	double		distance = 0;
-	double		light = 0;
-	bool		hit = false;
-	rt::Color	color;
+	float closestDistance = 0.f;
+	float distance = 0.f;
+	float light = 0.f;
+	bool hit = false;
+	rt::Color color;
 
 	int height = canvas.GetHeight() - (aStart / canvas.GetWidth()) - 1;
 	int width = aStart % canvas.GetWidth();
 
+	rt::VectorF rayHitPosition;
+	rt::VectorF hitSurfaceNormal;
+	Phong phongShading;
 
 	for (uint32 i = aStart; i < aEnd; i++)
 	{
 		rt::CanvasPixel pixel = canvas.CanvasPixels[i];
 
-		closestDistance = DBL_MAX;
+		closestDistance = INT_MAX;
 
 		hit = false;
 		for (auto& shape : aWorld.myShapes)
 		{
-			if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), aCamera.GetPosition(), distance, light))
+			if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), aCamera.GetPosition(), distance, rayHitPosition, hitSurfaceNormal))
 			{
 				if (distance > closestDistance)
 				{
@@ -62,13 +68,10 @@ rt::WorldDrawer::DrawWorldParallel(
 
 				closestDistance = distance;
 
-				color = shape->GetColor() * light + (distance / 8);
-				
-				/*{
-					std::lock_guard<std::mutex> lk(myMutex);
-					myDrawCanvas.push_back(rt::DrawPixel(color, width, height));
-				}*/
+				color = shape->GetColor();
+				phongShading.GetPixelShade(shape->GetMaterial(), shape, aWorld.myShapes, aWorld.myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
 
+				
 				DrawPixel(color, width, height);
 
 				hit = true;
@@ -94,17 +97,17 @@ rt::WorldDrawer::DrawWorld(
 	const rt::Camera& aCamera,
 	const rt::World& aWorld)
 {
+	ScopedPerfTracker tracker("name");
 	const rt::Canvas& canvas = aCamera.GetCanvas();
-	void* mPixels;
 
 	myDrawCanvas = {};
 
 	uint8 numberOfThreads = 2;
-	int slice = canvas.CanvasPixels.size() / numberOfThreads;
+	const int slice = canvas.CanvasPixels.size() / numberOfThreads;
 
-	auto a = SDL_GetTicks();
-	//use X threads
+	// use X threads
 	std::vector<std::thread> threads;
+
 	for (uint8 i = 0; i < numberOfThreads; i++)
 	{
 		threads.push_back(std::thread(std::bind(&rt::WorldDrawer::DrawWorldParallel, this, aCamera, aWorld, slice * i, (slice * (i + 1)) - 1)));
@@ -115,6 +118,8 @@ rt::WorldDrawer::DrawWorld(
 		thread.join();
 	}
 
-	auto b = SDL_GetTicks();
-	std::cout << b - a << std::endl;
+	//DrawWorldParallel(aCamera, aWorld, 0, canvas.CanvasPixels.size());
+
+	/*auto b = SDL_GetTicks();
+	std::cout << b - a << std::endl;*/
 }

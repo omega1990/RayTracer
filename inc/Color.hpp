@@ -11,12 +11,14 @@ namespace rt
 	enum ColorName
 	{
 		RED = 0,
-		SKY = 1,
-		GREY = 2,
-		DARK_BLUE = 3,
-		DARK_GREY = 4,
-		BLACK = 5, 
-		SPHERE = 6
+		SKY,
+		GREY,
+		DARK_BLUE,
+		DARK_GREY,
+		BLACK, 
+		SPHERE,
+		COPPER,
+		CHROME
 	};
 
 	class Color
