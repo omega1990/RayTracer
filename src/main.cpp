@@ -11,6 +11,7 @@
 #include "../inc/Camera.hpp"
 #include "../inc/World.hpp"
 #include "../inc/WorldDrawer.hpp"
+#include "../inc/Line.hpp"
 #include "../inc/LightSource.h"
 #include "../inc/main.hpp"
 
@@ -54,6 +55,8 @@ rt::World* GenerateWorld()
 
 	world->AddShape(new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze));
 	world->AddShape(new rt::Sphere(rt::Vector<float>(90.f, 60.f, 55.f), 50.f, rt::CHROME, materials::chrome));
+
+	//world->AddShape(new rt::Line(rt::Vector<float>(0.f, 60.f, 55.f), rt::Vector<float>(-5.0f, 1.0f, -20.0f), 200.f, 165.f, rt::ColorName::RED, materials::chrome));
 
 	world->AddLight(new rt::LightSource(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f));
 

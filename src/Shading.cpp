@@ -34,6 +34,9 @@ void Phong::GetPixelShade(
 
 		for (const auto& shape : aShapes)
 		{
+			if (!shape->GetIsObject())
+				continue;
+
 			if (aIgnoreSelf && shape == aShape)
 				continue;
 

@@ -44,6 +44,10 @@ inc/Material.h
 src/Material.cpp
 inc/Reflection.h
 src/Reflection.cpp
+inc/MassBody.hpp
+src/MassBody.cpp
+inc/Line.hpp
+src/Line.cpp
 )
 
 set(SDL2_DIR

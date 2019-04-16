@@ -74,9 +74,13 @@ rt::WorldDrawer::DrawWorldParallel(
 		if (shapeToDraw)
 		{
 			color = shapeToDraw->GetColor();
-			phongShading.GetPixelShade(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
-			Reflection::GetPixelReflection(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
-	
+
+			if (shapeToDraw->GetIsObject())
+			{
+				phongShading.GetPixelShade(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+				Reflection::GetPixelReflection(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+			}
+
 			DrawPixel(color, width, height);
 		}
 		else

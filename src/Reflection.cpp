@@ -30,6 +30,9 @@ void Reflection::GetPixelReflection(const Material& aMaterial, const rt::Shape* 
 	rt::Shape* reflectedShape = nullptr;
 	for (const auto& shape : aShapes)
 	{
+		if (!shape->GetIsObject())
+			continue;
+
 		if (shape == aShape)
 			continue;
 

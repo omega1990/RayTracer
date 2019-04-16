@@ -40,6 +40,9 @@ namespace rt
 		T		  GetMaxDot	 (const Vector<T>& aVector) const;
 		T		  DotProduct(const Vector<T> aVector1, const Vector<T> aVector2) const;
 		T		  Length() const;
+		bool	  IsZero() const;
+		Vector<T> Abs();
+
 
 				
 		friend std::ostream& operator<< (std::ostream& aOs, const Vector<T>& aV)
@@ -54,7 +57,6 @@ namespace rt
 	};
 
 	typedef Vector<float> VectorF;
-
 }
 
 
@@ -243,4 +245,23 @@ T
 rt::Vector<T>::Length() const
 {
 	return std::sqrt((myX * myX) + (myY * myY) + (myZ * myZ));
+}
+
+template <typename T>
+bool rt::Vector<T>::IsZero() const
+{
+	if ((int)myX == 0 && (int)myY == 0 && (int)myZ == 0) 
+		return true;
+
+	return false;
+}
+
+template <typename T>
+rt::Vector<T> rt::Vector<T>::Abs()
+{
+	myX = abs(myX);
+	myY = abs(myY);
+	myZ = abs(myZ);
+
+	return *this;
 }

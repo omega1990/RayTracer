@@ -22,15 +22,16 @@ namespace rt
 		const Material& GetMaterial() const;
 		const VectorF& GetPosition() const;
 		const void SetPosition(const VectorF& aPosition);
-
+		bool GetIsObject() const;
 
 	protected:
 		Shape(const VectorF& aPosition);
-		Shape(const VectorF& aPosition, const Color& aColor);
+		Shape(const VectorF& aPosition, const Color& aColor, bool aIsObject = true);
 		Shape(const Shape&& aShape);
 
 		Color myColor{ 0, 0, 0, 255 };
 		Material myMaterial{ 1.f, 1.f, 1.f, 1.f };
 		VectorF myPosition;
+		bool myIsObject;
 	};
 }
