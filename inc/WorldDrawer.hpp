@@ -23,12 +23,10 @@ namespace rt
 
 		void DrawWorldParallel(
 									const rt::Camera&	aCamera, 
-									const rt::World*	aWorld, 
 									uint32				aStart, 
 									uint32				aEnd);
 
-		void DrawWorld(				const rt::Camera&	aCamera,
-									const rt::World*	aWorld);
+		void DrawWorld(				const rt::Camera&	aCamera);
 
 	private: 
 		std::mutex		myMutex;

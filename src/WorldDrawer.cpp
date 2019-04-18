@@ -30,11 +30,11 @@ rt::WorldDrawer::DrawPixel(
 void 
 rt::WorldDrawer::DrawWorldParallel(
 	const rt::Camera&	aCamera,
-	const rt::World*	aWorld,
 	uint32				aStart,
 	uint32				aEnd)
 {
 	const rt::Canvas& canvas = aCamera.GetCanvas();
+	const rt::World& world = rt::World::GetInstance();
 
 	std::vector<rt::DrawPixel> drawCanvas;
 
@@ -59,7 +59,7 @@ rt::WorldDrawer::DrawWorldParallel(
 
 		rt::Shape* shapeToDraw = nullptr;
 
-		for (auto& shape : aWorld->myShapes)
+		for (auto&& shape : world.myShapes)
 		{
 			if (shape->IsIntersecting(rt::Vector<float>(pixel.X, pixel.Y, pixel.Z), aCamera.GetPosition(), distance, rayHitPosition, hitSurfaceNormal))
 			{
@@ -77,8 +77,8 @@ rt::WorldDrawer::DrawWorldParallel(
 
 			if (shapeToDraw->GetIsObject())
 			{
-				phongShading.GetPixelShade(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
-				Reflection::GetPixelReflection(shapeToDraw->GetMaterial(), shapeToDraw, aWorld->myShapes, aWorld->myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+				phongShading.GetPixelShade(shapeToDraw->GetMaterial(), shapeToDraw, world.myShapes, world.myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
+				Reflection::GetPixelReflection(shapeToDraw->GetMaterial(), shapeToDraw, world.myShapes, world.myLightSources, hitSurfaceNormal, rayHitPosition, aCamera.GetPosition(), color);
 			}
 
 			DrawPixel(color, width, height);
@@ -99,12 +99,8 @@ rt::WorldDrawer::DrawWorldParallel(
 
 void
 rt::WorldDrawer::DrawWorld(
-	const rt::Camera& aCamera,
-	const rt::World* aWorld)
+	const rt::Camera& aCamera)
 {
-	if (!aWorld)
-		return; 
-
 	ScopedPerfTracker tracker("name");
 	const rt::Canvas& canvas = aCamera.GetCanvas();
 
@@ -118,7 +114,7 @@ rt::WorldDrawer::DrawWorld(
 
 	for (uint8 i = 0; i < numberOfThreads; i++)
 	{
-		threads.push_back(std::thread(std::bind(&rt::WorldDrawer::DrawWorldParallel, this, aCamera, aWorld, slice * i, (slice * (i + 1)) - 1)));
+		threads.push_back(std::thread(std::bind(&rt::WorldDrawer::DrawWorldParallel, this, aCamera, slice * i, (slice * (i + 1)) - 1)));
 	}
 
 	for (auto& thread : threads)

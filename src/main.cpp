@@ -13,6 +13,7 @@
 #include "../inc/WorldDrawer.hpp"
 #include "../inc/Line.hpp"
 #include "../inc/LightSource.h"
+#include "../inc/DebugHandler.h"
 #include "../inc/main.hpp"
 
 SDL_Window* window;
@@ -47,26 +48,26 @@ SDLInit(
 	return {};
 }
 
-rt::World* GenerateWorld()
+void GenerateWorld()
 {
-	rt::World* world = new rt::World();
+	rt::World& world = rt::World::GetInstance();
 	
-	world->AddShape(new rt::Plane(rt::Vector<float>(0.0f, 1.0f, 0.0f), rt::Vector<float>(0.0f, -40.0f, 0.0f), rt::ColorName::DARK_GREY, materials::bronze));
+	world.AddShape(new rt::Plane(rt::Vector<float>(0.0f, 1.0f, 0.0f), rt::Vector<float>(0.0f, -40.0f, 0.0f), rt::ColorName::DARK_GREY, materials::bronze));
 
-	world->AddShape(new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze));
-	world->AddShape(new rt::Sphere(rt::Vector<float>(90.f, 60.f, 55.f), 50.f, rt::CHROME, materials::chrome));
+	world.AddShape(new rt::Sphere(rt::Vector<float>(-90.f, 60.f, 55.f), 50.f, rt::COPPER, materials::bronze));
+	world.AddShape(new rt::Sphere(rt::Vector<float>(0.f, 90.f, 55.f), 10.f, rt::CHROME, materials::chrome));
 
-	//world->AddShape(new rt::Line(rt::Vector<float>(0.f, 60.f, 55.f), rt::Vector<float>(-5.0f, 1.0f, -20.0f), 200.f, 165.f, rt::ColorName::RED, materials::chrome));
+	//world.AddShape(new rt::Line(rt::Vector<float>(0.f, 90.f, 55.f), rt::Vector<float>(0.f, 1.0f, 0.f), 100.f, 25.f, rt::ColorName::RED, materials::chrome));
 
-	world->AddLight(new rt::LightSource(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f));
-
-	return world;
+	world.AddLight(new rt::LightSource(rt::Vector<float>(-100.f, 170.f, 30.f), 2.f));
 }
 
 int main(int argc, char* argv[])
 {
 	rt::Camera camera;
-	rt::World* world = GenerateWorld();
+	GenerateWorld();
+
+	const rt::World& world = rt::World::GetInstance();
 
 	// Temporary
 	float x = 0.f;
@@ -120,12 +121,12 @@ int main(int argc, char* argv[])
 			}
 		}
 		
-		drawer.DrawWorld(camera, world);
+		drawer.DrawWorld(camera);
 
 		SDL_RenderPresent(renderer);
 		
-		world->myLightSources[0]->myPosition.SetX(x + std::cosf(angle)*radius);
-		world->myLightSources[0]->myPosition.SetZ(z + std::sinf(angle)*radius);
+		world.myLightSources[0]->myPosition.SetX(x + std::cosf(angle)*radius);
+		world.myLightSources[0]->myPosition.SetZ(z + std::sinf(angle)*radius);
 
 		//positionOne = world->myShapes[1]->GetPosition();
 		//positionOne.SetX(positionOne.GetX() + std::cosf(angle1) * radius1);
@@ -144,9 +145,6 @@ int main(int argc, char* argv[])
 		//world.myLightSources[1].myPosition.SetX(z + std::cosf(angle1)*radius);
 		//world.myLightSources[1].myPosition.SetZ(z + std::sinf(angle1)*radius);
 	}
-
-	delete world;
-	world = nullptr;
 
 	/* Shutdown all subsystems */
 	SDL_DestroyRenderer(renderer);

@@ -26,8 +26,10 @@ public:
 
 private:
 	float myThickness = 5.0f;
-	VectorF myStartPoint;
-	VectorF myDirection;
 	float myMagnitude;
+	VectorF myStartPoint;
+	VectorF myDirectionN;
+	VectorF myHeightVector;
+	VectorF myWidthVector;
 };
 }

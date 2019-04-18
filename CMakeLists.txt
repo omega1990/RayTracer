@@ -48,6 +48,9 @@ inc/MassBody.hpp
 src/MassBody.cpp
 inc/Line.hpp
 src/Line.cpp
+inc/DebugHandler.h
+src/DebugHandler.cpp
+inc/Singleton.h
 )
 
 set(SDL2_DIR

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Singleton.h"
 #include "Shape.hpp"
 #include "SDL.h"
 #include "LightSource.h"
@@ -9,49 +10,26 @@
 
 namespace rt
 {
-	class World
-	{
-	public:
-		World() {};
-		World(const World& world)
-		{
-			myShapes = world.myShapes;
-			myLightSources = world.myLightSources;
-		}
-		World(World&& world)
-		{
-			myShapes = std::move(world.myShapes);
-			myLightSources = std::move(world.myLightSources);
-		}
 
-		~World()
-		{
-			for (auto& shape : myShapes)
-			{
-				delete shape;
-				shape = nullptr;
-			}
+class World : public Singleton<World>
+{
+	friend class Singleton<World>;
 
-			for (auto& light : myLightSources)
-			{
-				delete light;
-				light = nullptr;
-			}
-		}
+public:
+	template <typename T>
+	void AddShape(T* aShape);
 
-		template <typename T>
-		void AddShape(T* aShape);
+	void AddLight(rt::LightSource* aLightSource);
 
-		void AddLight(rt::LightSource* aLightSource)
-		{
-			myLightSources.push_back(std::move(aLightSource));
-		}
+	std::vector<rt::Shape*> myShapes = {};
+	std::vector<rt::LightSource*> myLightSources = {};
 
-		std::vector<rt::Shape*> myShapes = {};
-		std::vector<rt::LightSource*> myLightSources = {};
-	};
+private:
+	World(){};
+	~World();
+};
+
 }
-
 
 template <typename T>
 void rt::World::AddShape(T* aShape)
