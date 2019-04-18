@@ -38,8 +38,6 @@ src/LightSource.cpp
 inc/LightSource.h
 inc/Shading.h
 src/Shading.cpp
-inc/Debug.h
-src/Debug.cpp
 inc/Material.h
 src/Material.cpp
 inc/Reflection.h
@@ -51,6 +49,7 @@ src/Line.cpp
 inc/DebugHandler.h
 src/DebugHandler.cpp
 inc/Singleton.h
+inc/DebugEntity.h
 )
 
 set(SDL2_DIR

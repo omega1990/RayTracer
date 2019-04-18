@@ -27,6 +27,10 @@ public:
 private:
 	World(){};
 	~World();
+
+public:
+	World(const World&) = delete;
+	void operator=(const World&) = delete;
 };
 
 }

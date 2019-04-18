@@ -1,15 +1,22 @@
-#include <cmath>
+#pragma once
 
-#include "../inc/Singleton.h"
-#include "../inc/Line.hpp"
-#include "../inc/World.hpp"
+#include "Singleton.h"
+#include "Line.hpp"
+#include "World.hpp"
+#include "DebugEntity.h"
 
 namespace rt 
 {
 
 class DebugHandler : public Singleton<DebugHandler>
 {
-	void DrawDebugLine(const Line& aLine);
+public:
+	void Draw(rt::DebugEntity* aDebugEntity);
+	void DrawDebugLine(Line& aLine);
+
+private:
+	std::vector<uint64_t> myDebugEntities;
+
 };
 
 }

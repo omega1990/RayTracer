@@ -4,10 +4,11 @@
 #include "Vector.hpp"
 #include "Shape.hpp"
 #include "Material.h"
+#include "DebugEntity.h"
 
 namespace rt
 {
-class Line : public Shape
+class Line : public Shape, public DebugEntity
 {
 public:
 
@@ -17,6 +18,8 @@ public:
 						const float 		 aThickness,
 						const rt::Color&	 aColor,
 						const Material&		 aMaterial);
+
+	~Line() override {};
 
 	bool IsIntersecting(const VectorF&		 aRayVector,
 						const VectorF&		 aRayOrigin,

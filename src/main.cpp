@@ -128,22 +128,14 @@ int main(int argc, char* argv[])
 		world.myLightSources[0]->myPosition.SetX(x + std::cosf(angle)*radius);
 		world.myLightSources[0]->myPosition.SetZ(z + std::sinf(angle)*radius);
 
-		//positionOne = world->myShapes[1]->GetPosition();
-		//positionOne.SetX(positionOne.GetX() + std::cosf(angle1) * radius1);
-		//positionOne.SetZ(positionOne.GetZ() + std::sinf(angle1) * radius1);
-		//world->myShapes[1]->SetPosition(positionOne);
-
-		//positionTwo = world->myShapes[2]->GetPosition();
-		//positionTwo.SetX(positionTwo.GetX() + std::cosf(angle2) * radius1);
-		//positionTwo.SetZ(positionTwo.GetZ() + std::sinf(angle2) * radius1);
-		//world->myShapes[2]->SetPosition(positionTwo);
+		rt::VectorF dir = world.myLightSources[0]->myPosition - rt::VectorF(0.f, 0.f, 0.f);
+		rt::Line line(rt::VectorF(0.f, 0.f, 0.f), dir, 100, 5.f, rt::ColorName::RED, materials::chrome);
+		line.Id = 0;
+		rt::DebugHandler::GetInstance().Draw(&line);
 
 		angle -= 0.05f;
 		angle1 += 0.1f;
 		angle2 = angle1 + 3.14f;
-
-		//world.myLightSources[1].myPosition.SetX(z + std::cosf(angle1)*radius);
-		//world.myLightSources[1].myPosition.SetZ(z + std::sinf(angle1)*radius);
 	}
 
 	/* Shutdown all subsystems */
